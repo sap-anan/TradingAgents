@@ -11,7 +11,11 @@ import os
 import glob
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from datetime import datetime, date as date_type
+from streamlit_autorefresh import st_autorefresh
+from core.bitkub_ws import BitkubWebSocket
+from core.indicators import rsi
 
 # ─── Config ───
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -29,9 +33,20 @@ st.set_page_config(
     layout="wide",
 )
 
+# Auto-refresh every 3 seconds for live WebSocket data
+st_autorefresh(interval=3000, limit=None, key="live_refresh")
+
 # ─── Session state init ───
 if "analysis_running" not in st.session_state:
     st.session_state["analysis_running"] = False
+
+# ─── WebSocket init (once per session) ───
+if "bitkub_ws" not in st.session_state:
+    _ws_coins = load_watchlist()
+    if _ws_coins:
+        _ws = BitkubWebSocket(coins=_ws_coins)
+        _ws.start()
+        st.session_state["bitkub_ws"] = _ws
 
 
 def load_memory():
@@ -90,38 +105,38 @@ COST_PER_CHAR = {
 
 
 def aggregate_to_1h_ohlc(snapshots, coin):
-    """Aggregate 5-minute snapshot ticks into 1-hour OHLC candles."""
-    # Collect (ts, price) for this coin
+    """Aggregate 5-minute snapshot ticks into 1-hour OHLC candles with volume."""
     ticks = []
     for snap in snapshots:
         cd = snap.get("coins", {}).get(coin)
         if cd:
-            ticks.append((snap["ts"], cd["price"]))
+            ticks.append((snap["ts"], cd["price"], cd.get("volume_24h", 0)))
 
     if len(ticks) < 2:
         return None
 
-    # Group by hour: ts // 3600 → same bucket
     buckets = {}
-    for ts, price in ticks:
+    for ts, price, vol in ticks:
         hour_key = ts // 3600
-        buckets.setdefault(hour_key, []).append((ts, price))
+        buckets.setdefault(hour_key, []).append((ts, price, vol))
 
     if len(buckets) < 2:
         return None
 
-    # Build OHLC per bucket
     candles = []
     for hour_key in sorted(buckets):
         pts = buckets[hour_key]
-        pts.sort(key=lambda x: x[0])  # sort by time
-        prices = [p for _, p in pts]
+        pts.sort(key=lambda x: x[0])
+        prices = [p for _, p, _ in pts]
+        vols = [v for _, _, v in pts]
+        vol_delta = max(vols[-1] - vols[0], 0) if vols else 0
         candles.append({
-            "ts": hour_key * 3600,  # clean hour boundary
+            "ts": hour_key * 3600,
             "open": prices[0],
             "high": max(prices),
             "low": min(prices),
             "close": prices[-1],
+            "volume": vol_delta,
         })
 
     return candles
@@ -456,20 +471,30 @@ with tab_watcher:
     else:
         last_snap = snapshots[-1]
 
-        # ─── Metric cards per coin ───
-        st.subheader("📊 Current Prices")
+        # ─── Live Ticker Cards ───
+        st.subheader("📊 Live Prices")
+        ws = st.session_state.get("bitkub_ws")
+        live = ws.get_prices() if ws else {}
+        status_icon = {"connected": "🟢", "disconnected": "🔴",
+                       "reconnecting": "🟡"}.get(ws.status if ws else "", "⚪")
+        st.caption(f"WebSocket: {status_icon} {ws.status if ws else 'N/A'}")
+
         cols = st.columns(min(len(selected_coins), 4) or 1)
         for i, coin in enumerate(selected_coins):
-            coin_data = last_snap.get("coins", {}).get(coin)
-            if not coin_data:
-                continue
             with cols[i % len(cols)]:
-                change = coin_data.get("change_24h", 0)
-                st.metric(
-                    label=coin,
-                    value=f"฿{coin_data['price']:,.2f}",
-                    delta=f"{change:+.2f}%",
-                )
+                if coin in live:
+                    cd = live[coin]
+                    st.metric(label=coin, value=f"฿{cd['last']:,.2f}",
+                              delta=f"{cd['change_pct']:+.2f}%")
+                    st.caption(f"Bid: ฿{cd['bid']:,.0f} | Ask: ฿{cd['ask']:,.0f} | "
+                               f"Vol: {cd['volume']:.2f}")
+                else:
+                    cd = last_snap.get("coins", {}).get(coin)
+                    if not cd:
+                        continue
+                    st.metric(label=coin, value=f"฿{cd['price']:,.2f}",
+                              delta=f"{cd.get('change_24h', 0):+.2f}%")
+                    st.caption("📡 Snapshot data")
 
         # ─── Price Line Chart ───
         st.subheader("📈 Price Ticks")
@@ -504,21 +529,71 @@ with tab_watcher:
                 st.caption(f"{coin}: Not enough data for candles (need 2+ hours of ticks)")
                 continue
 
-            fig_candle = go.Figure(data=[go.Candlestick(
-                x=[datetime.fromtimestamp(c["ts"]) for c in candles],
+            fig_candle = make_subplots(
+                rows=2, cols=1, shared_xaxes=True,
+                vertical_spacing=0.03, row_heights=[0.7, 0.3],
+            )
+            candle_times = [datetime.fromtimestamp(c["ts"]) for c in candles]
+            fig_candle.add_trace(go.Candlestick(
+                x=candle_times,
                 open=[c["open"] for c in candles],
                 high=[c["high"] for c in candles],
                 low=[c["low"] for c in candles],
                 close=[c["close"] for c in candles],
                 name=coin,
-            )])
+            ), row=1, col=1)
+            colors = ["#00cc66" if c["close"] >= c["open"] else "#ff4444"
+                      for c in candles]
+            fig_candle.add_trace(go.Bar(
+                x=candle_times,
+                y=[c["volume"] for c in candles],
+                marker_color=colors, name="Volume", opacity=0.6,
+            ), row=2, col=1)
             fig_candle.update_layout(
-                title=f"{coin} — 1H Candles",
-                xaxis_title="Hour", yaxis_title="Price (THB)",
+                title=f"{coin} — 1H Candles + Volume",
                 xaxis_rangeslider_visible=False,
-                height=400, margin=dict(t=40, b=30, l=50, r=20),
+                height=500, margin=dict(t=40, b=30, l=50, r=20),
+                showlegend=False,
             )
+            fig_candle.update_yaxes(title_text="Price (THB)", row=1, col=1)
+            fig_candle.update_yaxes(title_text="Volume", row=2, col=1)
             st.plotly_chart(fig_candle, use_container_width=True)
+
+        # ─── RSI Chart ───
+        st.subheader("📉 RSI(14)")
+        for coin in selected_coins:
+            prices = []
+            times = []
+            for snap in snapshots:
+                cd = snap.get("coins", {}).get(coin)
+                if cd:
+                    prices.append(cd["price"])
+                    times.append(datetime.fromtimestamp(snap["ts"]))
+
+            rsi_values = rsi(prices, period=14)
+            if not rsi_values:
+                st.caption(f"{coin}: Not enough data for RSI (need 15+ ticks)")
+                continue
+
+            rsi_times = times[14:]
+
+            fig_rsi = go.Figure()
+            fig_rsi.add_trace(go.Scatter(
+                x=rsi_times, y=rsi_values,
+                mode="lines", name="RSI(14)",
+                line=dict(color="#8b5cf6", width=2),
+            ))
+            fig_rsi.add_hline(y=70, line_dash="dash", line_color="red",
+                              annotation_text="Overbought")
+            fig_rsi.add_hline(y=30, line_dash="dash", line_color="green",
+                              annotation_text="Oversold")
+            fig_rsi.add_hline(y=50, line_dash="dot", line_color="gray")
+            fig_rsi.update_layout(
+                title=f"{coin} — RSI(14)",
+                yaxis=dict(range=[0, 100]),
+                height=250, margin=dict(t=40, b=30, l=50, r=20),
+            )
+            st.plotly_chart(fig_rsi, use_container_width=True)
 
         # ─── Event Log ───
         st.subheader("⚡ Events")
