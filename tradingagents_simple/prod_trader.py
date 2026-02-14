@@ -24,7 +24,7 @@ from core.risk_manager import RiskManager
 from core.broker import BrokerInterface
 from core.alerts import AlertManager
 from config import (
-    DEFAULT_CONFIG, DATA_CONFIG, RISK_CONFIG,
+    DEFAULT_CONFIG, FALLBACK_CONFIG, DATA_CONFIG, RISK_CONFIG,
     BROKER_CONFIG, ALERT_CONFIG,
 )
 
@@ -103,7 +103,7 @@ def main():
     console.print(f"[bold green]{'='*60}[/bold green]")
 
     try:
-        llm = LLMInterface(DEFAULT_CONFIG)
+        llm = LLMInterface(DEFAULT_CONFIG, fallback_config=FALLBACK_CONFIG)
         orchestrator = DebateOrchestrator(llm, data_fetcher, num_rounds=args.rounds)
 
         results = []

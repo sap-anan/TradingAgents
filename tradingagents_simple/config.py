@@ -28,8 +28,9 @@ GEMINI_CONFIG = {
     "model": "gemini-2.5-flash",  # FREE tier: 250 requests/day
 }
 
-# Default: Use DeepSeek (cheapest)
-DEFAULT_CONFIG = DEEPSEEK_CONFIG
+# Default: Gemini (FREE) primary, DeepSeek (cheap) fallback
+DEFAULT_CONFIG = GEMINI_CONFIG
+FALLBACK_CONFIG = DEEPSEEK_CONFIG
 
 # Data configuration
 DATA_CONFIG = {
