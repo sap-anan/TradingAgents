@@ -1,7 +1,6 @@
 import pytest
 import json
 import time
-from unittest.mock import patch, MagicMock
 from core.bitkub_ws import BitkubWebSocket
 
 
@@ -50,3 +49,28 @@ def test_reconnect_backoff():
     assert ws._backoff_delay(1) == 2
     assert ws._backoff_delay(2) == 4
     assert ws._backoff_delay(10) == 30  # capped
+
+
+def test_empty_coins_raises():
+    """Empty coins list should raise ValueError."""
+    with pytest.raises(ValueError):
+        BitkubWebSocket(coins=[])
+
+
+def test_ignores_unknown_coin():
+    """Messages for coins not in the subscription list are ignored."""
+    ws = BitkubWebSocket(coins=["BTC"])
+    raw = json.dumps({
+        "stream": "market.ticker.thb_eth",
+        "id": 1, "last": 100.0,
+    })
+    ws._on_message(None, raw)
+    assert "ETH" not in ws.get_prices()
+
+
+def test_ignores_malformed_stream():
+    """Stream ending with 'thb_' (empty coin) is ignored."""
+    ws = BitkubWebSocket(coins=["BTC"])
+    raw = json.dumps({"stream": "market.ticker.thb_", "id": 1, "last": 100.0})
+    ws._on_message(None, raw)
+    assert ws.get_prices() == {}

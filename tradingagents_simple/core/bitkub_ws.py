@@ -20,6 +20,8 @@ class BitkubWebSocket:
     MAX_BACKOFF = 30
 
     def __init__(self, coins: List[str]):
+        if not coins:
+            raise ValueError("coins list cannot be empty")
         self.coins = [c.upper() for c in coins]
         self._prices: Dict[str, dict] = {}
         self._lock = threading.Lock()
@@ -42,6 +44,8 @@ class BitkubWebSocket:
         if "market.ticker.thb_" not in stream:
             return
         coin = stream.split("thb_")[1].upper()
+        if not coin or coin not in self.coins:
+            return
         with self._lock:
             self._prices[coin] = {
                 "last": data.get("last", 0),
@@ -55,22 +59,26 @@ class BitkubWebSocket:
             }
 
     def _on_open(self, ws):
-        self.status = "connected"
+        with self._lock:
+            self.status = "connected"
         self._retry_count = 0
 
     def _on_close(self, ws, close_status, close_msg):
-        self.status = "disconnected"
+        with self._lock:
+            self.status = "disconnected"
         if self._running:
             self._reconnect()
 
     def _on_error(self, ws, error):
-        self.status = "reconnecting"
+        with self._lock:
+            self.status = "reconnecting"
 
     def _backoff_delay(self, attempt: int) -> int:
         return min(2 ** attempt, self.MAX_BACKOFF)
 
     def _reconnect(self):
-        self.status = "reconnecting"
+        with self._lock:
+            self.status = "reconnecting"
         delay = self._backoff_delay(self._retry_count)
         self._retry_count += 1
         time.sleep(delay)
