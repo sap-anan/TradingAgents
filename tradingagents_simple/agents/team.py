@@ -62,6 +62,7 @@ class AgentTeam:
             "ticker": ticker,
             "date": stock_data["date"],
             "current_price": stock_data["current_price"],
+            "currency": stock_data.get("currency", "$"),
             "decision": decision["decision"],
             "confidence": decision["confidence"],
             "reasoning": decision["reasoning"],

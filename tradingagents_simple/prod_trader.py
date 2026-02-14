@@ -25,8 +25,9 @@ from core.broker import BrokerInterface
 from core.alerts import AlertManager
 from config import (
     DEFAULT_CONFIG, FALLBACK_CONFIG, DATA_CONFIG, RISK_CONFIG,
-    BROKER_CONFIG, ALERT_CONFIG,
+    BROKER_CONFIG, ALERT_CONFIG, BITKUB_DATA_CONFIG, CRYPTO_RISK_CONFIG,
 )
+from watcher import load_watchlist
 
 console = Console()
 
@@ -45,7 +46,19 @@ def main():
     args = parser.parse_args()
 
     memory = TradingMemory()
-    data_fetcher = DataFetcher(DATA_CONFIG)
+
+    # Auto-detect crypto tickers from watchlist
+    crypto_coins = set(load_watchlist())
+    is_crypto = any(t.upper() in crypto_coins for t in (args.tickers or []))
+
+    if is_crypto:
+        from core.bitkub_data import BitkubDataFetcher
+        data_fetcher = BitkubDataFetcher(BITKUB_DATA_CONFIG)
+        risk_config = CRYPTO_RISK_CONFIG
+        console.print(f"  [cyan]📡 Bitkub mode (THB) — crypto detected[/cyan]")
+    else:
+        data_fetcher = DataFetcher(DATA_CONFIG)
+        risk_config = RISK_CONFIG
 
     # Utility commands
     if args.stats:
@@ -85,14 +98,15 @@ def main():
     console.print(f"[bold green]{'='*60}[/bold green]")
 
     broker = BrokerInterface(mode=broker_mode, config=BROKER_CONFIG)
-    risk_mgr = RiskManager(RISK_CONFIG)
+    risk_mgr = RiskManager(risk_config)
     alerts = AlertManager(ALERT_CONFIG)
 
     mode_icon = {"dry_run": "🧪", "alpaca_paper": "📄", "alpaca_live": "💰"}
     console.print(f"  Mode:    {mode_icon.get(broker_mode, '?')} {broker_mode}")
     console.print(f"  Model:   {DEFAULT_CONFIG.get('model', 'N/A')}")
-    console.print(f"  Risk:    max ${RISK_CONFIG['max_position_size']}/trade, "
-                   f"{RISK_CONFIG['max_positions']} positions")
+    currency = "฿" if is_crypto else "$"
+    console.print(f"  Risk:    max {currency}{risk_config['max_position_size']}/trade, "
+                   f"{risk_config['max_positions']} positions")
 
     summary = memory.get_summary()
     if summary["total_decisions"] > 0:
@@ -161,22 +175,23 @@ def display_verdict(decision: dict, risk: dict, execution: dict):
     """Display final verdict with risk and execution status"""
     color = {"BUY": "green", "SELL": "red", "HOLD": "yellow"}[decision["decision"]]
     winner_icon = {"bull": "🐂", "bear": "🐻", "tie": "🤝"}.get(decision.get("winner", "tie"), "🤝")
+    cur = decision.get("currency", "$")
 
     status_line = ""
     if not risk["approved"]:
         status_line = f"\n[red]🚫 {risk['reason']}[/red]"
     elif execution.get("executed"):
         status_line = (f"\n[green]📤 Order {execution['order_id']} | "
-                       f"{risk['shares']} shares @ ${decision['current_price']:.2f}[/green]")
+                       f"{risk['shares']} shares @ {cur}{decision['current_price']:,.2f}[/green]")
         if risk.get("stop_loss"):
-            status_line += f"\n   SL: ${risk['stop_loss']:.2f} | TP: ${risk['take_profit']:.2f}"
+            status_line += f"\n   SL: {cur}{risk['stop_loss']:,.2f} | TP: {cur}{risk['take_profit']:,.2f}"
 
     console.print(Panel(
         f"[bold {color}]{decision['decision']}[/bold {color}] "
         f"({decision['confidence']:.0%}) | Winner: {winner_icon}\n\n"
         f"{decision['reasoning']}"
         f"{status_line}",
-        title=f"🚀 {decision['ticker']} - ${decision['current_price']:.2f}",
+        title=f"🚀 {decision['ticker']} - {cur}{decision['current_price']:,.2f}",
         border_style=color,
     ))
 
@@ -212,7 +227,7 @@ def display_summary(results: list):
 
         table.add_row(
             r["ticker"],
-            f"${r['current_price']:.2f}",
+            f"{r.get('currency', '$')}{r['current_price']:,.2f}",
             f"[{dc}]{r['decision']}[/{dc}]",
             approved,
             str(risk["shares"]),

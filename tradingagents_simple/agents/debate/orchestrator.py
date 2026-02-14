@@ -5,6 +5,7 @@ Phase 3: Analysts inform → Bull argues → Bear rebuts → repeat → Judge de
 from typing import Dict, Any, List
 from core.llm import LLMInterface
 from core.data import DataFetcher
+from core.market_context import MarketContext
 from agents.team import AgentTeam
 from .bull import BullResearcher
 from .bear import BearResearcher
@@ -40,6 +41,12 @@ class DebateOrchestrator:
         team_result = self.team.analyze_and_decide(ticker, date)
         stock_data = team_result["data"]
         analyst_views = team_result["agent_views"]
+
+        # Inject intraday market context (from watcher)
+        market_context = MarketContext.context_string(date)
+        if market_context:
+            stock_data["market_context"] = market_context
+            print(f"\n  📊 Market context loaded ({MarketContext.load_today(date).get('snapshot_count', 0)} ticks)")
 
         # Phase 3: Debate
         print(f"\n{'─'*50}")
@@ -78,6 +85,7 @@ class DebateOrchestrator:
             "ticker": ticker,
             "date": stock_data["date"],
             "current_price": stock_data["current_price"],
+            "currency": stock_data.get("currency", "$"),
             "decision": verdict["decision"],
             "confidence": verdict["confidence"],
             "reasoning": verdict["reasoning"],
