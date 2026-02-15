@@ -783,24 +783,74 @@ with tab_arch:
     st.subheader("System Architecture — Dynamic Model Diagram")
     st.caption("DigSILENT PowerFactory-style | Pan: drag | Zoom: scroll | Hover: details")
 
-    # Demo mode toggle
-    demo_mode = st.checkbox("Demo Mode (simulated events)", value=True)
-    if demo_mode and "demo_started" not in st.session_state:
-        from components.demo_events import start_demo_events
-        start_demo_events()
-        st.session_state["demo_started"] = True
-
     bus = EventBus.instance()
+
+    # ─── Control buttons ───
+    btn_col1, btn_col2, btn_col3, btn_spacer = st.columns([1, 1, 1, 3])
+    with btn_col1:
+        if st.button("🎬 Demo Mode", help="Run one simulated pipeline cycle (~20s)"):
+            from components.demo_events import run_demo_cycle
+            run_demo_cycle()
+            st.toast("Demo started — watch the pipeline flow!", icon="🎬")
+    with btn_col2:
+        run_live = st.button("▶ Run Live Analysis", help="Analyze a ticker and watch real data flow")
+    with btn_col3:
+        if st.button("🗑 Clear", help="Reset diagram to idle"):
+            bus.clear()
+            st.rerun()
+
+    # ─── Live Analysis form ───
+    if run_live:
+        with st.form("arch_live_form"):
+            form_col1, form_col2, form_col3 = st.columns([2, 1, 1])
+            with form_col1:
+                live_ticker = st.text_input("Ticker", value="BTC", help="e.g. BTC, ETH, NVDA")
+            with form_col2:
+                live_rounds = st.number_input("Debate rounds", min_value=1, max_value=5, value=2)
+            with form_col3:
+                live_mode = st.selectbox("Mode", ["dry", "paper"], index=0)
+            submitted = st.form_submit_button("▶ Start Analysis", type="primary")
+            if submitted and live_ticker.strip():
+                bus.clear()
+                st.session_state["arch_live_ticker"] = live_ticker.strip().upper()
+                st.session_state["arch_live_rounds"] = live_rounds
+
+    # ─── Run live analysis in background ───
+    if "arch_live_ticker" in st.session_state:
+        ticker = st.session_state.pop("arch_live_ticker")
+        rounds = st.session_state.pop("arch_live_rounds", 2)
+        st.toast(f"Analyzing {ticker} — watch the diagram!", icon="▶")
+
+        import threading
+        def _run_live(t, r):
+            try:
+                from core.llm import LLMInterface
+                from core.data import DataFetcher
+                from agents.debate.orchestrator import DebateOrchestrator
+                from config import DEFAULT_CONFIG, FALLBACK_CONFIG, DATA_CONFIG
+                llm = LLMInterface(DEFAULT_CONFIG, FALLBACK_CONFIG)
+                data_fetcher = DataFetcher(DATA_CONFIG)
+                orch = DebateOrchestrator(llm, data_fetcher, num_rounds=r)
+                orch.analyze_and_decide(t)
+            except Exception as e:
+                bus.emit("system", "error", "analysis_failed", str(e), status="error")
+
+        threading.Thread(target=_run_live, args=(ticker, rounds), daemon=True).start()
+
+    # ─── Canvas ───
     events = bus.get_events(limit=50)
     statuses = bus.get_node_statuses()
 
     arch_html = render_architecture_html(events, statuses, width=1400, height=750)
     st.components.v1.html(arch_html, height=760, scrolling=False)
 
-    # Event log below canvas
+    # ─── Event log ───
     if events:
         with st.expander(f"Event Log ({len(events)} events)", expanded=False):
             df = pd.DataFrame(events[-20:][::-1])
+            # Convert mixed-type 'value' column to string for Arrow compatibility
+            if "value" in df.columns:
+                df["value"] = df["value"].astype(str)
             st.dataframe(df, use_container_width=True, hide_index=True)
 
 # ─── Footer ───
