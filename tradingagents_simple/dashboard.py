@@ -841,8 +841,8 @@ with tab_arch:
     events = bus.get_events(limit=50)
     statuses = bus.get_node_statuses()
 
-    arch_html = render_architecture_html(events, statuses, width=1400, height=750)
-    st.components.v1.html(arch_html, height=760, scrolling=False)
+    arch_html = render_architecture_html(events, statuses, width=1400, height=1200)
+    st.components.v1.html(arch_html, height=1200, scrolling=False)
 
     # ─── Event log ───
     if events:
