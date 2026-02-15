@@ -12,14 +12,9 @@ def render_architecture_html(
 ) -> str:
     """Return a complete HTML string with an interactive architecture diagram.
 
-    Args:
-        events: List of event dicts (keys: node, signal, value, latency_ms, ts, etc.)
-        node_statuses: Mapping of node id to status string (running/ok/pass/error/reject/idle).
-        width: Canvas width in CSS pixels.
-        height: Canvas height in CSS pixels.
-
-    Returns:
-        Full HTML document string suitable for ``st.components.v1.html()``.
+    The canvas is fully responsive — it fills the container width and
+    dynamically rescales its backing store on zoom so rendering stays
+    crisp at any zoom level. Supports pan (drag) and zoom (scroll).
     """
     events_json = json.dumps(events)
     statuses_json = json.dumps(node_statuses)
@@ -28,16 +23,24 @@ def render_architecture_html(
 <html><head><meta charset="utf-8">
 <style>
 * {{ margin:0; padding:0; box-sizing:border-box; }}
-body {{ background:#0f1218; overflow:hidden; font-family:Consolas,Monaco,monospace; }}
-canvas {{ display:block; }}
+html, body {{ width:100%; height:100%; background:#0f1218; overflow:hidden;
+  font-family:Consolas,Monaco,monospace; }}
+canvas {{ display:block; width:100%; height:100%; cursor:grab; }}
+canvas:active {{ cursor:grabbing; }}
 #tooltip {{
   display:none; position:absolute; background:#1c2030; border:1px solid #3a4560;
   border-radius:6px; padding:8px 12px; color:#c0c8d8; font-size:11px;
-  pointer-events:none; z-index:10; max-width:220px; line-height:1.5;
+  pointer-events:none; z-index:10; max-width:260px; line-height:1.5;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+}}
+#zoom-badge {{
+  position:absolute; bottom:8px; right:12px; color:#4a5568; font-size:10px;
+  font-family:Consolas,Monaco,monospace; pointer-events:none;
 }}
 </style></head><body>
-<canvas id="c" width="{width}" height="{height}"></canvas>
+<canvas id="c"></canvas>
 <div id="tooltip"></div>
+<div id="zoom-badge"></div>
 <script>
 (function() {{
   const EVENTS = {events_json};
@@ -46,18 +49,25 @@ canvas {{ display:block; }}
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
   const tooltip = document.getElementById('tooltip');
+  const zoomBadge = document.getElementById('zoom-badge');
 
-  // HiDPI
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = {width} * dpr;
-  canvas.height = {height} * dpr;
-  canvas.style.width = '{width}px';
-  canvas.style.height = '{height}px';
-  ctx.scale(dpr, dpr);
+  // ── Responsive canvas sizing ──
+  let W, H, dpr;
+  function resizeCanvas() {{
+    dpr = window.devicePixelRatio || 1;
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    // Scale backing store for crisp rendering at current zoom
+    const backingScale = dpr * Math.max(1, zoom);
+    canvas.width = W * backingScale;
+    canvas.height = H * backingScale;
+    ctx.setTransform(backingScale, 0, 0, backingScale, 0, 0);
+  }}
+  // Initial + on window resize
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-  const W = {width}, H = {height};
-
-  // Pan / Zoom state
+  // ── Pan / Zoom ──
   let panX = 0, panY = 0, zoom = 1;
   let dragging = false, dragStartX = 0, dragStartY = 0, panStartX = 0, panStartY = 0;
 
@@ -76,13 +86,16 @@ canvas {{ display:block; }}
   canvas.addEventListener('mouseleave', () => {{ dragging = false; tooltip.style.display='none'; }});
   canvas.addEventListener('wheel', e => {{
     e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.08 : 1/1.08;
-    const newZoom = Math.max(0.3, Math.min(3, zoom * factor));
+    const factor = e.deltaY < 0 ? 1.1 : 1/1.1;
+    const newZoom = Math.max(0.2, Math.min(5, zoom * factor));
+    // Zoom toward mouse pointer
     const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left, my = e.clientY - rect.top;
     panX = mx - (mx - panX) * (newZoom / zoom);
     panY = my - (my - panY) * (newZoom / zoom);
     zoom = newZoom;
+    // Resize backing store for crisp rendering at new zoom level
+    resizeCanvas();
   }}, {{ passive: false }});
 
   // ── Node definitions ──
@@ -131,7 +144,7 @@ canvas {{ display:block; }}
   }}
   function latestNodeLatency(nodeId) {{
     for (let i = EVENTS.length - 1; i >= 0; i--) {{
-      if (EVENTS[i].node === nodeId && EVENTS[i].latency_ms !== undefined) return EVENTS[i].latency_ms;
+      if (EVENTS[i].source === nodeId && EVENTS[i].latency_ms !== undefined) return EVENTS[i].latency_ms;
     }}
     return null;
   }}
@@ -151,7 +164,6 @@ canvas {{ display:block; }}
 
   // Pre-compute terminal indices
   connections.forEach(c => {{
-    const fromNode = nodeMap[c.from], toNode = nodeMap[c.to];
     const outsFrom = connections.filter(x => x.from === c.from);
     const insTo = connections.filter(x => x.to === c.to);
     c.outIdx = outsFrom.indexOf(c);
@@ -198,7 +210,9 @@ canvas {{ display:block; }}
     if (hit) {{
       const st = nodeStatus(hit.id);
       const lat = latestNodeLatency(hit.id);
-      tooltip.innerHTML = '<b>'+hit.label+'</b><br>Status: '+st+(lat!==null?'<br>Latency: '+lat+'ms':'')+'<br>Sub: '+hit.sub.join(', ');
+      tooltip.innerHTML = '<b>'+hit.label+'</b><br>Status: '+st
+        +(lat!==null?'<br>Latency: '+lat+'ms':'')
+        +'<br>Sub: '+hit.sub.join(', ');
       tooltip.style.display = 'block';
       tooltip.style.left = (e.clientX+12)+'px';
       tooltip.style.top = (e.clientY+12)+'px';
@@ -209,21 +223,33 @@ canvas {{ display:block; }}
 
   // ── Draw ──
   function draw() {{
-    ctx.save();
-    ctx.clearRect(0,0,W,H);
+    // Reset transform and clear entire backing store
+    const backingScale = dpr * Math.max(1, zoom);
+    ctx.setTransform(backingScale, 0, 0, backingScale, 0, 0);
+    ctx.clearRect(0, 0, W, H);
 
-    // Background (fill entire canvas)
+    // Background
     ctx.fillStyle = '#0f1218';
-    ctx.fillRect(0,0,W,H);
+    ctx.fillRect(0, 0, W, H);
 
-    // Apply pan/zoom BEFORE drawing grid and nodes
+    // Apply pan/zoom
     ctx.translate(panX, panY);
     ctx.scale(zoom, zoom);
 
-    // Dot grid (covers large area so zoom never reveals empty space)
+    // Dot grid — compute visible area in world coords and only draw visible dots
+    const visX0 = -panX / zoom - 100;
+    const visY0 = -panY / zoom - 100;
+    const visX1 = (W - panX) / zoom + 100;
+    const visY1 = (H - panY) / zoom + 100;
+    const gridStep = 30;
     ctx.fillStyle = '#1a1f2a';
-    const gridStart = -500, gridEnd = 2500;
-    for (let gx=gridStart; gx<gridEnd; gx+=30) for (let gy=gridStart; gy<gridEnd; gy+=30) ctx.fillRect(gx,gy,1,1);
+    const gx0 = Math.floor(visX0/gridStep)*gridStep;
+    const gy0 = Math.floor(visY0/gridStep)*gridStep;
+    for (let gx=gx0; gx<visX1; gx+=gridStep) {{
+      for (let gy=gy0; gy<visY1; gy+=gridStep) {{
+        ctx.fillRect(gx, gy, 1, 1);
+      }}
+    }}
 
     // ── Connections ──
     connections.forEach(c => {{
@@ -343,13 +369,16 @@ canvas {{ display:block; }}
 
       // Perf label
       const lat = latestNodeLatency(n.id);
-      const perfTxt = st + (lat !== null ? ' · ' + lat + 'ms' : '');
+      const perfTxt = st + (lat !== null ? ' \\u00b7 ' + lat + 'ms' : '');
       ctx.font = '9px Consolas,Monaco,monospace';
       ctx.fillStyle = '#6b7280';
       ctx.fillText(perfTxt, n.x + 20, n.y + n.h - 6);
     }});
 
-    ctx.restore();
+    ctx.setTransform(1,0,0,1,0,0);
+    // Zoom badge (screen space)
+    zoomBadge.textContent = (zoom*100).toFixed(0) + '%';
+
     requestAnimationFrame(draw);
   }}
 
