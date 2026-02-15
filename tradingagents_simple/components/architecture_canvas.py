@@ -54,10 +54,13 @@ canvas:active {{ cursor:grabbing; }}
   // ── Pan / Zoom (declare before resizeCanvas uses zoom) ──
   let panX = 0, panY = 0, zoom = 1;
 
-  // ── Canvas sizing ──
-  const W = {width}, H = {height};
+  // ── Canvas sizing (use iframe dimensions) ──
   const dpr = window.devicePixelRatio || 1;
+  let W = window.innerWidth || {width};
+  let H = window.innerHeight || {height};
   function resizeCanvas() {{
+    W = window.innerWidth || {width};
+    H = window.innerHeight || {height};
     const scale = dpr * Math.max(1, zoom);
     canvas.width = W * scale;
     canvas.height = H * scale;
@@ -65,6 +68,7 @@ canvas:active {{ cursor:grabbing; }}
     canvas.style.height = H + 'px';
   }}
   resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
   let dragging = false, dragStartX = 0, dragStartY = 0, panStartX = 0, panStartY = 0;
 
   canvas.addEventListener('mousedown', e => {{
