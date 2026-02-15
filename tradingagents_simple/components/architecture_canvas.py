@@ -25,7 +25,7 @@ def render_architecture_html(
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 html, body {{ width:100%; height:100%; background:#0f1218; overflow:hidden;
   font-family:Consolas,Monaco,monospace; }}
-canvas {{ display:block; width:100%; height:100%; cursor:grab; }}
+canvas {{ display:block; width:100%; height:{height}px; cursor:grab; }}
 canvas:active {{ cursor:grabbing; }}
 #tooltip {{
   display:none; position:absolute; background:#1c2030; border:1px solid #3a4560;
@@ -52,19 +52,24 @@ canvas:active {{ cursor:grabbing; }}
   const zoomBadge = document.getElementById('zoom-badge');
 
   // ── Responsive canvas sizing ──
-  let W, H, dpr;
+  let W = {width}, H = {height}, dpr = window.devicePixelRatio || 1;
   function resizeCanvas() {{
     dpr = window.devicePixelRatio || 1;
-    W = canvas.clientWidth;
-    H = canvas.clientHeight;
+    // Use container size if available, otherwise fallback to defaults
+    const cw = canvas.clientWidth || canvas.parentElement.clientWidth || {width};
+    const ch = canvas.clientHeight || canvas.parentElement.clientHeight || {height};
+    if (cw > 0) W = cw;
+    if (ch > 0) H = ch;
     // Scale backing store for crisp rendering at current zoom
     const backingScale = dpr * Math.max(1, zoom);
     canvas.width = W * backingScale;
     canvas.height = H * backingScale;
     ctx.setTransform(backingScale, 0, 0, backingScale, 0, 0);
   }}
-  // Initial + on window resize
+  // Delay initial resize to let iframe layout complete
   resizeCanvas();
+  setTimeout(resizeCanvas, 100);
+  setTimeout(resizeCanvas, 500);
   window.addEventListener('resize', resizeCanvas);
 
   // ── Pan / Zoom ──
