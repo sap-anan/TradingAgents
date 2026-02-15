@@ -212,16 +212,18 @@ canvas {{ display:block; }}
     ctx.save();
     ctx.clearRect(0,0,W,H);
 
-    // Background
+    // Background (fill entire canvas)
     ctx.fillStyle = '#0f1218';
     ctx.fillRect(0,0,W,H);
 
-    // Dot grid
-    ctx.fillStyle = '#1a1f2a';
-    for (let gx=0; gx<W; gx+=30) for (let gy=0; gy<H; gy+=30) ctx.fillRect(gx,gy,1,1);
-
+    // Apply pan/zoom BEFORE drawing grid and nodes
     ctx.translate(panX, panY);
     ctx.scale(zoom, zoom);
+
+    // Dot grid (covers large area so zoom never reveals empty space)
+    ctx.fillStyle = '#1a1f2a';
+    const gridStart = -500, gridEnd = 2500;
+    for (let gx=gridStart; gx<gridEnd; gx+=30) for (let gy=gridStart; gy<gridEnd; gy+=30) ctx.fillRect(gx,gy,1,1);
 
     // ── Connections ──
     connections.forEach(c => {{
