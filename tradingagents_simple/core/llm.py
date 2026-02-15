@@ -8,6 +8,7 @@ import os
 import json
 import time
 import requests
+from core.event_bus import EventBus
 from datetime import datetime
 from typing import Dict, Any, Optional
 
@@ -165,6 +166,10 @@ class LLMInterface:
             "latency_ms": latency_ms,
             "circuit_breaker": self._breaker.status_dict(),
         })
+
+        EventBus.instance().emit("llm", provider, "response",
+            {"prompt_len": len(prompt), "response_len": len(result)},
+            latency_ms=latency_ms, status="ok")
 
         return result
 

@@ -6,6 +6,7 @@ The Risk Manager has VETO POWER over any AI decision.
 """
 from typing import Dict, Any, Optional
 from datetime import datetime
+from core.event_bus import EventBus
 
 
 class RiskManager:
@@ -129,6 +130,9 @@ class RiskManager:
             **result
         })
 
+        EventBus.instance().emit("risk_manager", "broker", "risk_check",
+            {"approved": True, "action": action, "ticker": ticker},
+            status="pass")
         return result
 
     def _calculate_position_size(self, price: float, confidence: float,
@@ -148,6 +152,9 @@ class RiskManager:
         return size
 
     def _reject(self, ticker: str, action: str, reason: str) -> Dict[str, Any]:
+        EventBus.instance().emit("risk_manager", "broker", "risk_check",
+            {"approved": False, "action": action, "ticker": ticker, "reason": reason},
+            status="reject")
         return {
             "approved": False,
             "action": action,

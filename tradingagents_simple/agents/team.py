@@ -4,6 +4,7 @@ Phase 2: Multi-agent collaboration with consensus decision
 """
 from typing import Dict, Any, List
 from core.llm import LLMInterface
+from core.event_bus import EventBus
 from core.data import DataFetcher
 from .technical import TechnicalAgent
 from .fundamental import FundamentalAgent
@@ -43,6 +44,7 @@ class AgentTeam:
         # Step 1: Fetch data (shared across all agents)
         print(f"\n📊 Fetching market data...")
         stock_data = self.data.fetch_stock_data(ticker, date)
+        EventBus.instance().emit("market_data", "team", "price", stock_data.get("current_price", 0), status="running")
         cs = stock_data.get("currency", "$")
         print(f"✓ {ticker} @ {cs}{stock_data['current_price']:,.2f}")
 
@@ -52,6 +54,7 @@ class AgentTeam:
             print(f"\n{agent.ICON} {agent.ROLE} analyzing...")
             view = agent.analyze(stock_data)
             agent_views.append(view)
+            EventBus.instance().emit(agent.ROLE.lower(), "debate", "score", view.get("confidence", 0), status="running")
             print(f"  → {view['view']} ({view['confidence']:.0%}): {view['analysis'][:80]}...")
 
         # Step 3: Synthesize consensus

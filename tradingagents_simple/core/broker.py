@@ -9,6 +9,7 @@ Supports:
 import os
 from typing import Dict, Any, Optional
 from datetime import datetime
+from core.event_bus import EventBus
 
 
 class BrokerInterface:
@@ -93,6 +94,9 @@ class BrokerInterface:
             "order_id": f"DRY-{len(self._order_log) + 1:04d}",
         }
         self._order_log.append(result)
+        EventBus.instance().emit("broker", "output", "order",
+            {"action": order["action"], "ticker": order["ticker"], "shares": order["shares"]},
+            status="ok")
         return result
 
     def _alpaca_execute(self, order: Dict) -> Dict[str, Any]:

@@ -6,6 +6,7 @@ from typing import Dict, Any, List
 from core.llm import LLMInterface
 from core.data import DataFetcher
 from core.market_context import MarketContext
+from core.event_bus import EventBus
 from agents.team import AgentTeam
 from .bull import BullResearcher
 from .bear import BearResearcher
@@ -41,6 +42,7 @@ class DebateOrchestrator:
         team_result = self.team.analyze_and_decide(ticker, date)
         stock_data = team_result["data"]
         analyst_views = team_result["agent_views"]
+        EventBus.instance().emit("team", "debate", "analyst_views", len(analyst_views), status="running")
 
         # Inject intraday market context (from watcher)
         market_context = MarketContext.context_string(date)
@@ -65,6 +67,7 @@ class DebateOrchestrator:
                 stock_data, analyst_views, bear_argument=bear_arg, round_num=rnd
             )
             print(f"     Conviction: {bull_result['conviction']:.0%}")
+            EventBus.instance().emit("debate", "debate", "bull_round", bull_result.get("conviction", 0), status="running")
 
             # Bear rebuts bull
             print(f"  🐻 Bear rebutting...")
@@ -72,6 +75,7 @@ class DebateOrchestrator:
                 stock_data, analyst_views, bull_argument=bull_result["argument"], round_num=rnd
             )
             print(f"     Conviction: {bear_result['conviction']:.0%}")
+            EventBus.instance().emit("debate", "debate", "bear_round", bear_result.get("conviction", 0), status="running")
 
             bear_arg = bear_result["argument"]
             debate_rounds.append({"bull": bull_result, "bear": bear_result})
@@ -80,6 +84,9 @@ class DebateOrchestrator:
         print(f"\n  ⚖️  Judge deliberating...")
         verdict = self.judge.judge(stock_data, analyst_views, debate_rounds)
         print(f"     Winner: {verdict['winner'].upper()} → {verdict['decision']}")
+        EventBus.instance().emit("debate", "risk_manager", "decision",
+            {"signal": verdict.get("decision"), "confidence": verdict.get("confidence", 0)},
+            status="running")
 
         return {
             "ticker": ticker,
