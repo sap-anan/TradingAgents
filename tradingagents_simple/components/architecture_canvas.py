@@ -25,7 +25,7 @@ def render_architecture_html(
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 html, body {{ width:100%; height:100%; background:#0f1218; overflow:hidden;
   font-family:Consolas,Monaco,monospace; }}
-canvas {{ display:block; width:100%; height:{height}px; cursor:grab; }}
+canvas {{ display:block; cursor:grab; }}
 canvas:active {{ cursor:grabbing; }}
 #tooltip {{
   display:none; position:absolute; background:#1c2030; border:1px solid #3a4560;
@@ -51,29 +51,20 @@ canvas:active {{ cursor:grabbing; }}
   const tooltip = document.getElementById('tooltip');
   const zoomBadge = document.getElementById('zoom-badge');
 
-  // ── Responsive canvas sizing ──
-  let W = {width}, H = {height}, dpr = window.devicePixelRatio || 1;
-  function resizeCanvas() {{
-    dpr = window.devicePixelRatio || 1;
-    // Use container size if available, otherwise fallback to defaults
-    const cw = canvas.clientWidth || canvas.parentElement.clientWidth || {width};
-    const ch = canvas.clientHeight || canvas.parentElement.clientHeight || {height};
-    if (cw > 0) W = cw;
-    if (ch > 0) H = ch;
-    // Scale backing store for crisp rendering at current zoom
-    const backingScale = dpr * Math.max(1, zoom);
-    canvas.width = W * backingScale;
-    canvas.height = H * backingScale;
-    ctx.setTransform(backingScale, 0, 0, backingScale, 0, 0);
-  }}
-  // Delay initial resize to let iframe layout complete
-  resizeCanvas();
-  setTimeout(resizeCanvas, 100);
-  setTimeout(resizeCanvas, 500);
-  window.addEventListener('resize', resizeCanvas);
-
-  // ── Pan / Zoom ──
+  // ── Pan / Zoom (declare before resizeCanvas uses zoom) ──
   let panX = 0, panY = 0, zoom = 1;
+
+  // ── Canvas sizing ──
+  const W = {width}, H = {height};
+  const dpr = window.devicePixelRatio || 1;
+  function resizeCanvas() {{
+    const scale = dpr * Math.max(1, zoom);
+    canvas.width = W * scale;
+    canvas.height = H * scale;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+  }}
+  resizeCanvas();
   let dragging = false, dragStartX = 0, dragStartY = 0, panStartX = 0, panStartY = 0;
 
   canvas.addEventListener('mousedown', e => {{
@@ -228,9 +219,9 @@ canvas:active {{ cursor:grabbing; }}
 
   // ── Draw ──
   function draw() {{
-    // Reset transform and clear entire backing store
-    const backingScale = dpr * Math.max(1, zoom);
-    ctx.setTransform(backingScale, 0, 0, backingScale, 0, 0);
+    // Reset transform to identity scaled by dpr
+    const scale = dpr * Math.max(1, zoom);
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
     // Background
