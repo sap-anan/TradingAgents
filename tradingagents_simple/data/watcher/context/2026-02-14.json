@@ -1,0 +1,52 @@
+{
+  "date": "2026-02-14",
+  "coins": {
+    "ADA": {
+      "open": 8.89,
+      "high": 8.89,
+      "low": 8.89,
+      "close": 8.89,
+      "change_pct": 0.0,
+      "regime": "UNKNOWN",
+      "volatility": "UNKNOWN",
+      "tick_count": 1,
+      "summary": "ADA up 0.0% today (\u0e3f9 \u2192 \u0e3f9) [unknown, 1 ticks]"
+    },
+    "BTC": {
+      "open": 2166195.6,
+      "high": 2166195.6,
+      "low": 2166195.6,
+      "close": 2166195.6,
+      "change_pct": 0.0,
+      "regime": "UNKNOWN",
+      "volatility": "UNKNOWN",
+      "tick_count": 1,
+      "summary": "BTC up 0.0% today (\u0e3f2,166,196 \u2192 \u0e3f2,166,196) [unknown, 1 ticks]"
+    },
+    "ETH": {
+      "open": 64822.06,
+      "high": 64822.06,
+      "low": 64822.06,
+      "close": 64822.06,
+      "change_pct": 0.0,
+      "regime": "UNKNOWN",
+      "volatility": "UNKNOWN",
+      "tick_count": 1,
+      "summary": "ETH up 0.0% today (\u0e3f64,822 \u2192 \u0e3f64,822) [unknown, 1 ticks]"
+    },
+    "SOL": {
+      "open": 2707.97,
+      "high": 2707.97,
+      "low": 2707.97,
+      "close": 2707.97,
+      "change_pct": 0.0,
+      "regime": "UNKNOWN",
+      "volatility": "UNKNOWN",
+      "tick_count": 1,
+      "summary": "SOL up 0.0% today (\u0e3f2,708 \u2192 \u0e3f2,708) [unknown, 1 ticks]"
+    }
+  },
+  "market_sentiment": "NEUTRAL",
+  "snapshot_count": 1,
+  "generated_at": "2026-02-14T22:01:38.957039"
+}

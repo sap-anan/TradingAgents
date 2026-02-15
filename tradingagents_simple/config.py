@@ -91,6 +91,17 @@ CRYPTO_RISK_CONFIG = {
     "volatility_scale": True,         # Reduce size when volatility > 5%
 }
 
+# Market Watcher (24/7 monitoring)
+WATCHER_CONFIG = {
+    "interval_seconds": 300,           # 5 min polling
+    "price_alert_1h_pct": 3.0,        # Alert if price changes >3% in 1 hour
+    "price_alert_4h_pct": 5.0,        # Alert if price changes >5% in 4 hours
+    "volume_spike_multiplier": 2.0,    # Alert if volume > 2x rolling average
+    "retention_days": 30,              # Keep snapshots for 30 days
+    "telegram_alerts": True,           # Send Telegram on significant events
+    "data_dir": os.path.join(os.path.dirname(__file__), "data", "watcher"),
+}
+
 # Alerts (Phase 5)
 ALERT_CONFIG = {
     "channels": ["console", "file"],  # Add "telegram" if configured

@@ -1,0 +1,1327 @@
+{
+  "decisions": [
+    {
+      "id": 1,
+      "ticker": "NVDA",
+      "date": "2026-02-14",
+      "price_at_decision": 182.80999755859375,
+      "decision": "BUY",
+      "confidence": 0.75,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.85
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.65
+        }
+      ],
+      "winner": "bull",
+      "recorded_at": "2026-02-14T13:40:43.925797",
+      "outcome": {
+        "price_now": 182.80999755859375,
+        "pct_change": 0.0,
+        "correct": false,
+        "evaluated_at": "2026-02-14T13:42:16.622040"
+      }
+    },
+    {
+      "id": 2,
+      "ticker": "NVDA",
+      "date": "2026-02-14",
+      "price_at_decision": 182.80999755859375,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.85
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.65
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T13:50:47.051207",
+      "outcome": null
+    },
+    {
+      "id": 3,
+      "ticker": "AAPL",
+      "date": "2026-02-14",
+      "price_at_decision": 255.77999877929688,
+      "decision": "BUY",
+      "confidence": 0.7,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.65
+        }
+      ],
+      "winner": "bull",
+      "recorded_at": "2026-02-14T13:51:16.596003",
+      "outcome": null
+    },
+    {
+      "id": 4,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 2174455.75,
+      "decision": "SELL",
+      "confidence": 0.8,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T18:21:19.050821",
+      "outcome": {
+        "price_now": 2185300.0,
+        "pct_change": 0.5,
+        "correct": false,
+        "evaluated_at": "2026-02-14T19:04:18.093462"
+      }
+    },
+    {
+      "id": 5,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 2184796.92,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T18:22:39.943314",
+      "outcome": {
+        "price_now": 2185300.0,
+        "pct_change": 0.02,
+        "correct": true,
+        "evaluated_at": "2026-02-14T19:04:18.420164"
+      }
+    },
+    {
+      "id": 6,
+      "ticker": "ADA",
+      "date": "2026-02-14",
+      "price_at_decision": 8.81,
+      "decision": "SELL",
+      "confidence": 0.7,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T18:23:27.164600",
+      "outcome": {
+        "price_now": 8.8,
+        "pct_change": -0.11,
+        "correct": false,
+        "evaluated_at": "2026-02-14T19:04:18.705000"
+      }
+    },
+    {
+      "id": 7,
+      "ticker": "ADA",
+      "date": "2026-02-14",
+      "price_at_decision": 8.77,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.6
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T18:49:16.813068",
+      "outcome": {
+        "price_now": 8.8,
+        "pct_change": 0.34,
+        "correct": true,
+        "evaluated_at": "2026-02-14T19:04:18.969061"
+      }
+    },
+    {
+      "id": 8,
+      "ticker": "ETH",
+      "date": "2026-02-14",
+      "price_at_decision": 65247.33,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T18:52:38.563464",
+      "outcome": {
+        "price_now": 65085.95,
+        "pct_change": -0.25,
+        "correct": true,
+        "evaluated_at": "2026-02-14T19:04:19.275827"
+      }
+    },
+    {
+      "id": 9,
+      "ticker": "AAPL",
+      "date": "2026-02-14",
+      "price_at_decision": 255.77999877929688,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.65
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T18:53:19.793420",
+      "outcome": null
+    },
+    {
+      "id": 10,
+      "ticker": "ADA",
+      "date": "2026-02-14",
+      "price_at_decision": 8.8,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.6
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T19:05:05.323827",
+      "outcome": null
+    },
+    {
+      "id": 11,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 2185299.94,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T19:05:51.983478",
+      "outcome": null
+    },
+    {
+      "id": 12,
+      "ticker": "ETH",
+      "date": "2026-02-14",
+      "price_at_decision": 65153.14,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.7
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T19:06:41.851958",
+      "outcome": null
+    },
+    {
+      "id": 13,
+      "ticker": "SOL",
+      "date": "2026-02-14",
+      "price_at_decision": 2707.49,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.45
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.6
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T19:07:29.028378",
+      "outcome": null
+    },
+    {
+      "id": 14,
+      "ticker": "SOL",
+      "date": "2026-02-14",
+      "price_at_decision": 2699.11,
+      "decision": "SELL",
+      "confidence": 0.8,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.7
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.9
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T20:12:19.512025",
+      "outcome": null
+    },
+    {
+      "id": 15,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "SELL",
+      "confidence": 0.85,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.6
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T22:32:46.003457",
+      "outcome": null
+    },
+    {
+      "id": 16,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.7
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.8
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T22:36:33.821641",
+      "outcome": null
+    },
+    {
+      "id": 17,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "BUY",
+      "confidence": 0.7,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.4
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "bull",
+      "recorded_at": "2026-02-14T22:38:22.171612",
+      "outcome": null
+    },
+    {
+      "id": 18,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T22:40:54.330920",
+      "outcome": null
+    },
+    {
+      "id": 19,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.4
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-14T22:47:37.797916",
+      "outcome": null
+    },
+    {
+      "id": 20,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.4
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T22:49:20.238833",
+      "outcome": null
+    },
+    {
+      "id": 21,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.4
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T22:55:22.376351",
+      "outcome": null
+    },
+    {
+      "id": 22,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.5
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T23:00:09.765821",
+      "outcome": null
+    },
+    {
+      "id": 23,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.4
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T23:05:34.557057",
+      "outcome": null
+    },
+    {
+      "id": 24,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 30.43000030517578,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.4
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T23:11:16.450885",
+      "outcome": null
+    },
+    {
+      "id": 25,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 2167488.57,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.8
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T23:15:39.176822",
+      "outcome": null
+    },
+    {
+      "id": 26,
+      "ticker": "BTC",
+      "date": "2026-02-14",
+      "price_at_decision": 2165667.02,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-14T23:17:03.818190",
+      "outcome": null
+    },
+    {
+      "id": 27,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170392.66,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:13:00.395702",
+      "outcome": null
+    },
+    {
+      "id": 28,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170414.92,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:13:48.454511",
+      "outcome": null
+    },
+    {
+      "id": 29,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2171478.95,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:15:13.747424",
+      "outcome": null
+    },
+    {
+      "id": 30,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170683.91,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:16:04.952994",
+      "outcome": null
+    },
+    {
+      "id": 31,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170663.13,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:16:54.179071",
+      "outcome": null
+    },
+    {
+      "id": 32,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170000.0,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:17:38.897429",
+      "outcome": null
+    },
+    {
+      "id": 33,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170000.0,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.8
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:18:27.332024",
+      "outcome": null
+    },
+    {
+      "id": 34,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2172233.04,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "bear",
+      "recorded_at": "2026-02-15T01:19:15.450302",
+      "outcome": null
+    },
+    {
+      "id": 35,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170824.65,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.85
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:20:02.699060",
+      "outcome": null
+    },
+    {
+      "id": 36,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170824.69,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:20:51.634813",
+      "outcome": null
+    },
+    {
+      "id": 37,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2172233.24,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.65
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:21:37.565840",
+      "outcome": null
+    },
+    {
+      "id": 38,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2171790.61,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:22:24.851670",
+      "outcome": null
+    },
+    {
+      "id": 39,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2171948.54,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.65
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:23:08.769496",
+      "outcome": null
+    },
+    {
+      "id": 40,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2171058.26,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:23:57.758408",
+      "outcome": null
+    },
+    {
+      "id": 41,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2172017.6,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "NEUTRAL",
+          "confidence": 0.55
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.85
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:24:42.077062",
+      "outcome": null
+    },
+    {
+      "id": 42,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2171152.88,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.7
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:25:30.454276",
+      "outcome": null
+    },
+    {
+      "id": 43,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170386.69,
+      "decision": "HOLD",
+      "confidence": 0.6,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:26:15.270136",
+      "outcome": null
+    },
+    {
+      "id": 44,
+      "ticker": "BTC",
+      "date": "2026-02-15",
+      "price_at_decision": 2170386.69,
+      "decision": "HOLD",
+      "confidence": 0.55,
+      "mode": "debate",
+      "agent_views": [
+        {
+          "agent": "Technical Analyst",
+          "view": "BEARISH",
+          "confidence": 0.75
+        },
+        {
+          "agent": "Fundamental Analyst",
+          "view": "BULLISH",
+          "confidence": 0.8
+        },
+        {
+          "agent": "Sentiment Analyst",
+          "view": "BEARISH",
+          "confidence": 0.85
+        }
+      ],
+      "winner": "tie",
+      "recorded_at": "2026-02-15T01:39:24.454302",
+      "outcome": null
+    }
+  ],
+  "agent_stats": {
+    "Technical Analyst": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.667
+    },
+    "Fundamental Analyst": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.667
+    },
+    "Sentiment Analyst": {
+      "correct": 1,
+      "total": 6,
+      "accuracy": 0.167
+    }
+  }
+}

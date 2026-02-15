@@ -29,6 +29,10 @@ class BullResearcher:
         rsi = data['indicators']['rsi']
         rsi_str = f"{rsi:.1f}" if rsi else "N/A"
 
+        market_ctx = ""
+        if data.get("market_context"):
+            market_ctx = f"\n## Intraday Market Context\n{data['market_context']}\n"
+
         rebuttal = ""
         if bear_arg:
             rebuttal = f"""
@@ -47,7 +51,7 @@ You MUST directly address and counter the bear's specific points above.
 
 ## Analyst Team Reports
 {views_text}
-{rebuttal}
+{market_ctx}{rebuttal}
 ## Your Task (Round {round_num})
 Make the STRONGEST possible case for BUYING {data['ticker']}.
 - Find bullish signals the analysts might have missed

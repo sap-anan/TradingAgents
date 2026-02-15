@@ -35,10 +35,14 @@ class DebateJudge:
             debate_text += f"🐂 BULL (conviction {rnd['bull']['conviction']:.0%}): {rnd['bull']['argument']}\n"
             debate_text += f"🐻 BEAR (conviction {rnd['bear']['conviction']:.0%}): {rnd['bear']['argument']}\n"
 
+        market_ctx = ""
+        if data.get("market_context"):
+            market_ctx = f"\n## Intraday Market Context\n{data['market_context']}\n"
+
         return f"""You are a Senior Portfolio Manager making the FINAL trading decision.
 
 ## Stock: {data['ticker']} @ {data.get("currency", "$")}{data['current_price']:,.2f}
-
+{market_ctx}
 ## Analyst Consensus
 {views_text}
 
