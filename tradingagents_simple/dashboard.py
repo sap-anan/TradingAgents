@@ -16,6 +16,8 @@ from datetime import datetime, date as date_type
 from streamlit_autorefresh import st_autorefresh
 from core.bitkub_ws import BitkubWebSocket
 from core.indicators import rsi
+from components.architecture_canvas import render_architecture_html
+from core.event_bus import EventBus
 
 # ─── Config ───
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -153,7 +155,7 @@ st.title("🦈 Leviathan Trading Monitor")
 st.caption("Phase 5 — TradingAgents Simple System")
 
 # ─── Tabs ───
-tab_trading, tab_watcher, tab_llm = st.tabs(["🦈 Trading Monitor", "📡 Market Watcher", "🤖 LLM Usage"])
+tab_trading, tab_watcher, tab_llm, tab_arch = st.tabs(["🦈 Trading Monitor", "📡 Market Watcher", "🤖 LLM Usage", "🏗️ Architecture"])
 
 # ══════════════════════════════════════════════════════════════
 # Tab 1: Trading Monitor (original content)
@@ -773,6 +775,33 @@ with tab_llm:
                                      "prompt_len", "response_len", "latency_ms", "error"]
                         if c in df.columns]
         st.dataframe(df[display_cols], use_container_width=True, hide_index=True)
+
+# ══════════════════════════════════════════════════════════════
+# Tab 4: Architecture — PowerFactory Dynamic Model Diagram
+# ══════════════════════════════════════════════════════════════
+with tab_arch:
+    st.subheader("System Architecture — Dynamic Model Diagram")
+    st.caption("DigSILENT PowerFactory-style | Pan: drag | Zoom: scroll | Hover: details")
+
+    # Demo mode toggle
+    demo_mode = st.checkbox("Demo Mode (simulated events)", value=True)
+    if demo_mode and "demo_started" not in st.session_state:
+        from components.demo_events import start_demo_events
+        start_demo_events()
+        st.session_state["demo_started"] = True
+
+    bus = EventBus.instance()
+    events = bus.get_events(limit=50)
+    statuses = bus.get_node_statuses()
+
+    arch_html = render_architecture_html(events, statuses, width=1400, height=750)
+    st.components.v1.html(arch_html, height=760, scrolling=False)
+
+    # Event log below canvas
+    if events:
+        with st.expander(f"Event Log ({len(events)} events)", expanded=False):
+            df = pd.DataFrame(events[-20:][::-1])
+            st.dataframe(df, use_container_width=True, hide_index=True)
 
 # ─── Footer ───
 st.divider()
